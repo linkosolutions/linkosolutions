@@ -20,10 +20,10 @@ export const SITE = {
   name: "LinkoSolutions",
   tagline: "Software para comercios",
   // ✏️ Número de WhatsApp
-  whatsapp: "5491112345678",
+  whatsapp: "5491157038075",
   whatsappMessage: "Hola! Me interesa una demo de ComerciOS.",
-  email: "contacto@linkosolutions.com",
-  instagram: "https://instagram.com/linkosolutions",
+  email: "linkosolutionss@gmail.com",
+  instagram: "https://instagram.com/linkosolutionss",
   linkedin: "",
 }
 

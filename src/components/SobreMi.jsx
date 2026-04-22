@@ -1,5 +1,6 @@
 import { SOBRE_MI, SITE } from "../data/siteConfig"
 import SectionHeader from "./SectionHeader"
+import icono from "../assets/icono.png"
 
 export default function SobreMi() {
   return (
@@ -12,7 +13,7 @@ export default function SobreMi() {
             <div className="relative">
               <div className="w-40 h-40 rounded-2xl overflow-hidden border-4 border-white shadow-xl">
                 <img
-                  src="/src/assets/icono.png"
+                  src={icono}
                   alt="LinkoSolutions"
                   className="w-full h-full object-cover"
                 />

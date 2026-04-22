@@ -12,7 +12,7 @@ export default function SobreMi() {
             <div className="relative">
               <div className="w-40 h-40 rounded-2xl overflow-hidden border-4 border-white shadow-xl">
                 <img
-                  src="/src/assets/icono.ico"
+                  src="/src/assets/icono.png"
                   alt="LinkoSolutions"
                   className="w-full h-full object-cover"
                 />

@@ -65,9 +65,9 @@ export default function Navbar() {
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Menú"
         >
-          <div className={`w-5 h-px bg-ink transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-1" : ""}`} />
-          <div className={`w-5 h-px bg-ink mt-1.5 transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
-          <div className={`w-5 h-px bg-ink mt-1.5 transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2.5" : ""}`} />
+          <div className={`w-5 h-px transition-all duration-300 ${scrolled ? "bg-ink" : "bg-white"} ${menuOpen ? "rotate-45 translate-y-1" : ""}`} />
+          <div className={`w-5 h-px mt-1.5 transition-all duration-300 ${scrolled ? "bg-ink" : "bg-white"} ${menuOpen ? "opacity-0" : ""}`} />
+          <div className={`w-5 h-px mt-1.5 transition-all duration-300 ${scrolled ? "bg-ink" : "bg-white"} ${menuOpen ? "-rotate-45 -translate-y-2.5" : ""}`} />
         </button>
       </nav>
 

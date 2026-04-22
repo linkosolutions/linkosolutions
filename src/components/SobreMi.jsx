@@ -10,16 +10,12 @@ export default function SobreMi() {
           <div className="flex flex-col items-center md:items-start gap-8">
             {/* Avatar */}
             <div className="relative">
-              <div className="w-40 h-40 rounded-2xl bg-ink flex items-center justify-center overflow-hidden border-4 border-white shadow-xl">
-                {/* ✏️ Para agregar tu foto: reemplazá este div por <img src={tuFoto} ... /> */}
-                <span className="font-display font-bold text-5xl text-accent">
-                  {/* ✏️ MODIFICAR: inicial de tu nombre */}
-                  {SOBRE_MI.nombre.charAt(0)}
-                </span>
-              </div>
-              {/* Badge verde */}
-              <div className="absolute -bottom-2 -right-2 bg-accent text-ink text-xs font-body font-bold px-3 py-1 rounded-full shadow-lg">
-                Dev ✓
+              <div className="w-40 h-40 rounded-2xl overflow-hidden border-4 border-white shadow-xl">
+                <img
+                  src="/src/assets/icono.ico"
+                  alt="LinkoSolutions"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
 
@@ -59,7 +55,7 @@ export default function SobreMi() {
                 {
                   icon: "🤝",
                   titulo: "Trato directo",
-                  desc: "Sin intermediarios. Hablás siempre conmigo.",
+                  desc: "Sin intermediarios. Hablás siempre con nosotros.",
                 },
                 {
                   icon: "⚡",
@@ -69,7 +65,7 @@ export default function SobreMi() {
                 {
                   icon: "🛠",
                   titulo: "Soporte continuo",
-                  desc: "Estoy disponible para resolver cualquier duda.",
+                  desc: "Estamos disponibles para resolver cualquier duda.",
                 },
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-4">

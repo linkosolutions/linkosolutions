@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { SISTEMAS, SITE } from "../data/siteConfig"
 
 const sistema = SISTEMAS.find(s => s.slug === "techpro")
@@ -13,6 +13,7 @@ export default function TechProPage() {
     <div className="min-h-screen bg-slate-light font-body">
       <PageNavbar />
       <HeroProducto />
+      <CarruselSeccion />
       <FeaturesSeccion />
       <ModulosSeccion />
       <PreciosSeccion />
@@ -60,17 +61,9 @@ function HeroProducto() {
           <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
           {sistema.badge}
         </span>
-
-        <h1 className="font-display font-extrabold text-5xl md:text-7xl text-white tracking-tight mb-4">
-          {sistema.name}
-        </h1>
-
+        <h1 className="font-display font-extrabold text-5xl md:text-7xl text-white tracking-tight mb-4">{sistema.name}</h1>
         <p className="font-display font-semibold text-accent text-xl mb-6">{sistema.tagline}</p>
-
-        <p className="font-body text-xl text-white/50 max-w-2xl mx-auto leading-relaxed mb-10">
-          {sistema.description}
-        </p>
-
+        <p className="font-body text-xl text-white/50 max-w-2xl mx-auto leading-relaxed mb-10">{sistema.description}</p>
         <div className="flex flex-wrap gap-4 justify-center">
           <a href={waDemo} target="_blank" rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-ink font-bold text-base px-8 py-4 rounded-full transition-all duration-200 shadow-lg shadow-accent/20 hover:-translate-y-0.5">
@@ -82,13 +75,138 @@ function HeroProducto() {
             Consultar planes
           </a>
         </div>
-
         <div className="flex flex-wrap justify-center gap-6 mt-12">
           {["✓ 7 días gratis", "✓ Sin tarjeta", "✓ ARS y USD", "✓ Multi-usuario"].map((item, i) => (
             <span key={i} className="text-white/30 text-sm font-body">{item}</span>
           ))}
         </div>
       </div>
+    </section>
+  )
+}
+
+// ── Carrusel con drag, swipe y lightbox ──
+function CarruselSeccion() {
+  const [current, setCurrent] = useState(0)
+  const [lightbox, setLightbox] = useState(false)
+  const fotos = sistema.screenshots
+  const dragStart = useRef(null)
+  const isDragging = useRef(false)
+  const [dragOffset, setDragOffset] = useState(0)
+
+  const prev = () => setCurrent(i => i === 0 ? fotos.length - 1 : i - 1)
+  const next = () => setCurrent(i => i === fotos.length - 1 ? 0 : i + 1)
+
+  useEffect(() => {
+    document.body.style.overflow = lightbox ? "hidden" : ""
+    return () => { document.body.style.overflow = "" }
+  }, [lightbox])
+
+  useEffect(() => {
+    if (!lightbox) return
+    const onKey = (e) => {
+      if (e.key === "ArrowLeft") prev()
+      if (e.key === "ArrowRight") next()
+      if (e.key === "Escape") setLightbox(false)
+    }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [lightbox, current])
+
+  const onMouseDown = (e) => { dragStart.current = e.clientX; isDragging.current = false }
+  const onMouseMove = (e) => {
+    if (dragStart.current === null) return
+    const diff = e.clientX - dragStart.current
+    if (Math.abs(diff) > 5) isDragging.current = true
+    setDragOffset(diff)
+  }
+  const onMouseUp = () => {
+    if (dragStart.current === null) return
+    if (Math.abs(dragOffset) > 60) dragOffset < 0 ? next() : prev()
+    dragStart.current = null; setDragOffset(0)
+  }
+  const onTouchStart = (e) => { dragStart.current = e.touches[0].clientX }
+  const onTouchMove = (e) => { if (dragStart.current !== null) setDragOffset(e.touches[0].clientX - dragStart.current) }
+  const onTouchEnd = () => {
+    if (Math.abs(dragOffset) > 60) dragOffset < 0 ? next() : prev()
+    dragStart.current = null; setDragOffset(0)
+  }
+
+  return (
+    <section className="py-20 bg-ink">
+      <div className="max-w-5xl mx-auto px-6">
+        <div className="text-center mb-10">
+          <span className="text-xs font-semibold uppercase tracking-widest text-accent">Capturas del sistema</span>
+          <h2 className="font-display font-bold text-3xl md:text-4xl text-white mt-2">El sistema en acción</h2>
+        </div>
+
+        <div
+          className="relative aspect-video bg-ink/50 rounded-2xl overflow-hidden border border-white/10 cursor-grab active:cursor-grabbing select-none"
+          onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp} onMouseLeave={onMouseUp}
+          onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}
+        >
+          <img
+            src={fotos[current].src}
+            alt={fotos[current].label}
+            draggable={false}
+            onClick={() => { if (!isDragging.current) setLightbox(true) }}
+            style={{ transform: `translateX(${dragOffset}px)`, transition: dragOffset === 0 ? "transform 0.2s ease" : "none" }}
+            className="w-full h-full object-cover cursor-zoom-in"
+          />
+          <div className="absolute top-3 left-3 bg-black/50 backdrop-blur-sm text-white/80 text-xs px-2.5 py-1 rounded-full flex items-center gap-1.5 cursor-pointer"
+            onClick={() => setLightbox(true)}>
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg>
+            Ver en grande
+          </div>
+          <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-sm text-white/60 text-xs px-2.5 py-1 rounded-full">{current + 1} / {fotos.length}</div>
+          <div className="absolute bottom-12 left-3 bg-black/50 backdrop-blur-sm text-white text-xs font-medium px-2.5 py-1 rounded-full">{fotos[current].label}</div>
+          <button onClick={prev} className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/40 hover:bg-black/70 rounded-full flex items-center justify-center text-white transition-colors">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+          </button>
+          <button onClick={next} className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/40 hover:bg-black/70 rounded-full flex items-center justify-center text-white transition-colors">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+          </button>
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent pt-6 pb-2 px-2">
+            <div className="flex gap-1.5 overflow-x-auto pb-1">
+              {fotos.map((foto, i) => (
+                <button key={i} onClick={() => setCurrent(i)}
+                  className={`flex-shrink-0 w-14 h-9 rounded overflow-hidden border-2 transition-all ${i === current ? "border-accent" : "border-transparent opacity-40 hover:opacity-70"}`}>
+                  <img src={foto.src} alt={foto.label} draggable={false} className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Lightbox */}
+      {lightbox && (
+        <div className="fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center" onClick={() => setLightbox(false)}>
+          <div className="relative max-w-5xl w-full px-4" onClick={e => e.stopPropagation()}>
+            <img src={fotos[current].src} alt={fotos[current].label} className="w-full max-h-[80vh] object-contain rounded-xl" />
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 text-white text-sm px-4 py-1.5 rounded-full">{fotos[current].label}</div>
+            <button onClick={e => { e.stopPropagation(); prev() }} className="absolute left-6 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+            </button>
+            <button onClick={e => { e.stopPropagation(); next() }} className="absolute right-6 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+            </button>
+          </div>
+          <p className="text-white/40 text-sm mt-4">{current + 1} / {fotos.length}</p>
+          <div className="flex gap-2 mt-3 overflow-x-auto max-w-2xl px-4" onClick={e => e.stopPropagation()}>
+            {fotos.map((foto, i) => (
+              <button key={i} onClick={() => setCurrent(i)}
+                className={`flex-shrink-0 w-14 h-10 rounded overflow-hidden border-2 transition-all ${i === current ? "border-accent" : "border-transparent opacity-40 hover:opacity-70"}`}>
+                <img src={foto.src} alt={foto.label} draggable={false} className="w-full h-full object-cover" />
+              </button>
+            ))}
+          </div>
+          <button onClick={() => setLightbox(false)} className="absolute top-4 right-4 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+          <p className="absolute bottom-4 text-white/20 text-xs">← arrastrá o usá las flechas · ESC para cerrar</p>
+        </div>
+      )}
     </section>
   )
 }
@@ -118,68 +236,19 @@ function FeaturesSeccion() {
   )
 }
 
-// Módulos detallados
 const MODULOS = [
-  {
-    icono: "📱",
-    nombre: "Equipos",
-    descripcion: "Alta por IMEI único, estados, historial, garantía automática al vender y búsqueda por IMEI, marca o modelo.",
-  },
-  {
-    icono: "📦",
-    nombre: "Productos",
-    descripcion: "Accesorios, repuestos y electrónica con precios en ARS y USD, control de stock y alertas de mínimo.",
-  },
-  {
-    icono: "🛒",
-    nombre: "Ventas",
-    descripcion: "Ventas en ARS/USD, múltiples formas de pago, parte de pago, vuelto automático y descuentos.",
-  },
-  {
-    icono: "🔧",
-    nombre: "Reparaciones",
-    descripcion: "Órdenes de reparación con técnico asignado, historial de estados y seguimiento por cliente.",
-  },
-  {
-    icono: "📅",
-    nombre: "Citas",
-    descripcion: "Agenda con fecha y hora, estados y link directo a WhatsApp del cliente.",
-  },
-  {
-    icono: "👥",
-    nombre: "Clientes",
-    descripcion: "Gestión de clientes con historial completo de compras y reparaciones.",
-  },
-  {
-    icono: "🚚",
-    nombre: "Proveedores",
-    descripcion: "Alta de proveedores con CUIT, teléfono, email y asociación a productos y equipos.",
-  },
-  {
-    icono: "🔍",
-    nombre: "Historial IMEI",
-    descripcion: "Búsqueda de cualquier equipo por IMEI con historial completo de estados y garantía.",
-  },
-  {
-    icono: "📊",
-    nombre: "Reportes",
-    descripcion: "Stock valorizado, garantías activas, top productos, ventas por vendedor y ranking de clientes.",
-  },
-  {
-    icono: "🔐",
-    nombre: "Multi-local",
-    descripcion: "Cada local con sus propios datos aislados, registro propio y panel SuperAdmin.",
-  },
-  {
-    icono: "⚙️",
-    nombre: "Roles y usuarios",
-    descripcion: "Admin, Vendedor, Técnico y Solo lectura. Controlá qué puede hacer cada uno.",
-  },
-  {
-    icono: "💬",
-    nombre: "Soporte",
-    descripcion: "Botón flotante de WhatsApp en toda la app para contactarnos en cualquier momento.",
-  },
+  { icono: "📱", nombre: "Equipos", descripcion: "Alta por IMEI único, estados, historial, garantía automática al vender y búsqueda por IMEI, marca o modelo." },
+  { icono: "📦", nombre: "Productos", descripcion: "Accesorios, repuestos y electrónica con precios en ARS y USD, control de stock y alertas de mínimo." },
+  { icono: "🛒", nombre: "Ventas", descripcion: "Ventas en ARS/USD, múltiples formas de pago, parte de pago, vuelto automático y descuentos." },
+  { icono: "🔧", nombre: "Reparaciones", descripcion: "Órdenes de reparación con técnico asignado, historial de estados y seguimiento por cliente." },
+  { icono: "📅", nombre: "Citas", descripcion: "Agenda con fecha y hora, estados y link directo a WhatsApp del cliente." },
+  { icono: "👥", nombre: "Clientes", descripcion: "Gestión de clientes con historial completo de compras y reparaciones." },
+  { icono: "🚚", nombre: "Proveedores", descripcion: "Alta de proveedores con CUIT, teléfono, email y asociación a productos y equipos." },
+  { icono: "🔍", nombre: "Historial IMEI", descripcion: "Búsqueda de cualquier equipo por IMEI con historial completo de estados y garantía." },
+  { icono: "📊", nombre: "Reportes", descripcion: "Stock valorizado, garantías activas, top productos, ventas por vendedor y ranking de clientes." },
+  { icono: "🔐", nombre: "Multi-local", descripcion: "Cada local con sus propios datos aislados, registro propio y panel SuperAdmin." },
+  { icono: "⚙️", nombre: "Roles y usuarios", descripcion: "Admin, Vendedor, Técnico y Solo lectura. Controlá qué puede hacer cada uno." },
+  { icono: "💬", nombre: "Soporte", descripcion: "Botón flotante de WhatsApp en toda la app para contactarnos en cualquier momento." },
 ]
 
 function ModulosSeccion() {
@@ -218,7 +287,6 @@ function PreciosSeccion() {
           <h2 className="font-display font-bold text-3xl md:text-4xl text-ink mt-2">Elegí tu plan</h2>
           <p className="text-ink/40 mt-3">Empezá gratis. Escalá cuando lo necesites.</p>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {sistema.planes.map((plan) => {
             const waComprar = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(`Hola! Quiero contratar el plan ${plan.nombre} de TechPro.`)}`
@@ -226,29 +294,16 @@ function PreciosSeccion() {
             const esPro = plan.destacado
 
             return (
-              <div key={plan.id} className={`relative rounded-2xl p-8 flex flex-col ${
-                esPro
-                  ? "bg-ink border-2 border-accent"
-                  : "bg-white border border-slate-mid"
-              }`}>
+              <div key={plan.id} className={`relative rounded-2xl p-8 flex flex-col ${esPro ? "bg-ink border-2 border-accent" : "bg-white border border-slate-mid"}`}>
                 {esPro && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-ink text-xs font-bold px-4 py-1 rounded-full">
-                    ⭐ Más popular
-                  </div>
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-ink text-xs font-bold px-4 py-1 rounded-full">⭐ Más popular</div>
                 )}
-
-                <h3 className={`font-display font-bold text-xl mb-1 ${esPro ? "text-white" : "text-ink"}`}>
-                  {plan.nombre}
-                </h3>
+                <h3 className={`font-display font-bold text-xl mb-1 ${esPro ? "text-white" : "text-ink"}`}>{plan.nombre}</h3>
                 <p className={`text-sm mb-6 ${esPro ? "text-white/40" : "text-ink/50"}`}>{plan.descripcion}</p>
-
                 <div className="flex items-end gap-2 mb-8">
-                  <span className={`font-display font-extrabold text-4xl ${esPro ? "text-accent" : "text-ink"}`}>
-                    {plan.precio}
-                  </span>
+                  <span className={`font-display font-extrabold text-4xl ${esPro ? "text-accent" : "text-ink"}`}>{plan.precio}</span>
                   <span className={`text-sm mb-1 ${esPro ? "text-white/40" : "text-ink/40"}`}>{plan.precioDetalle}</span>
                 </div>
-
                 <ul className="space-y-2.5 mb-8 flex-1">
                   {plan.features.map((f, i) => (
                     <li key={i} className={`flex items-start gap-2 text-sm ${esPro ? "text-white/70" : "text-ink/70"}`}>
@@ -267,19 +322,12 @@ function PreciosSeccion() {
                     </li>
                   ))}
                 </ul>
-
-                <a
-                  href={esPrueba ? waDemo : waComprar}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <a href={esPrueba ? waDemo : waComprar} target="_blank" rel="noopener noreferrer"
                   className={`flex items-center justify-center gap-2 w-full font-bold text-sm py-3.5 rounded-xl transition-colors ${
-                    esPro
-                      ? "bg-accent hover:bg-accent-dark text-ink"
-                      : esPrueba
-                      ? "bg-ink text-white hover:bg-ink/80"
-                      : "bg-slate-light border border-slate-mid text-ink hover:border-accent/40"
-                  }`}
-                >
+                    esPro ? "bg-accent hover:bg-accent-dark text-ink"
+                    : esPrueba ? "bg-ink text-white hover:bg-ink/80"
+                    : "bg-slate-light border border-slate-mid text-ink hover:border-accent/40"
+                  }`}>
                   <WhatsAppIcon />
                   {esPrueba ? "Empezar prueba gratis" : `Contratar ${plan.nombre}`}
                 </a>
@@ -376,12 +424,8 @@ function CtaFinal() {
   return (
     <section className="py-24 bg-accent">
       <div className="max-w-6xl mx-auto px-6 text-center">
-        <h2 className="font-display font-extrabold text-3xl md:text-5xl text-ink mb-4">
-          Probalo gratis por 7 días
-        </h2>
-        <p className="font-body text-ink/60 text-lg mb-10 max-w-xl mx-auto">
-          Sin tarjeta. Sin compromiso. Con acceso Pro completo desde el primer día.
-        </p>
+        <h2 className="font-display font-extrabold text-3xl md:text-5xl text-ink mb-4">Probalo gratis por 7 días</h2>
+        <p className="font-body text-ink/60 text-lg mb-10 max-w-xl mx-auto">Sin tarjeta. Sin compromiso. Con acceso Pro completo desde el primer día.</p>
         <div className="flex flex-wrap gap-4 justify-center">
           <a href={waDemo} target="_blank" rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-ink text-white font-bold text-base px-8 py-4 rounded-full hover:bg-ink/80 transition-colors shadow-xl">
@@ -402,9 +446,7 @@ function PageFooter() {
   return (
     <footer className="bg-ink border-t border-white/5 py-8">
       <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-        <a href="/" className="font-display font-bold text-lg text-white">
-          Linko<span className="text-accent">Solutions</span>
-        </a>
+        <a href="/" className="font-display font-bold text-lg text-white">Linko<span className="text-accent">Solutions</span></a>
         <p className="font-body text-white/20 text-xs">© {new Date().getFullYear()} LinkoSolutions — Todos los derechos reservados</p>
         <a href="/" className="font-body text-white/40 hover:text-accent text-sm transition-colors">← Volver al inicio</a>
       </div>

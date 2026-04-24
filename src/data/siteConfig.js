@@ -18,12 +18,20 @@ import usuarios from '../assets/usuarios.png'
 import configuracion from '../assets/configuracion.png'
 
 // ── TechPro screenshots ──
-// ✏️ Cuando tengas las fotos, copiálas a src/assets/techpro/ y descomentá estas líneas:
-// import tp_equipos from '../assets/techpro/equipos.png'
-// import tp_ventas from '../assets/techpro/ventas.png'
-// import tp_reparaciones from '../assets/techpro/reparaciones.png'
-// import tp_clientes from '../assets/techpro/clientes.png'
-// import tp_reportes from '../assets/techpro/reportes.png'
+import tp_dashboard     from '../assets/techpro/dashboard.png'
+import tp_equipos       from '../assets/techpro/equipos.png'
+import tp_imei          from '../assets/techpro/imei.png'
+import tp_ventas        from '../assets/techpro/ventas.png'
+import tp_productos     from '../assets/techpro/productos.png'
+import tp_reparaciones  from '../assets/techpro/reparaciones.png'
+import tp_citas         from '../assets/techpro/citas.png'
+import tp_clientes      from '../assets/techpro/clientes.png'
+import tp_proveedores   from '../assets/techpro/proveedores.png'
+import tp_reportes      from '../assets/techpro/reportes.png'
+import tp_reportes2     from '../assets/techpro/reportes2.png'
+import tp_reportes3     from '../assets/techpro/reportes3.png'
+import tp_reportes4     from '../assets/techpro/reportes4.png'
+import tp_configuracion from '../assets/techpro/configuracion.png'
 
 export const SITE = {
   name: "LinkoSolutions",
@@ -172,14 +180,21 @@ export const SISTEMAS = [
       "Multi-usuario con roles",
       "Multi-local (multi-tenant)",
     ],
-    // ✏️ Reemplazá null por los imports cuando tengas las fotos
     screenshots: [
-      { src: null, label: "Equipos" },
-      { src: null, label: "Ventas" },
-      { src: null, label: "Reparaciones" },
-      { src: null, label: "Citas" },
-      { src: null, label: "Clientes" },
-      { src: null, label: "Reportes" },
+      { src: tp_dashboard,     label: "Dashboard" },
+      { src: tp_equipos,       label: "Equipos" },
+      { src: tp_imei,          label: "Historial IMEI" },
+      { src: tp_ventas,        label: "Ventas" },
+      { src: tp_productos,     label: "Productos" },
+      { src: tp_reparaciones,  label: "Reparaciones" },
+      { src: tp_citas,         label: "Citas" },
+      { src: tp_clientes,      label: "Clientes" },
+      { src: tp_proveedores,   label: "Proveedores" },
+      { src: tp_reportes,      label: "Reportes" },
+      { src: tp_reportes2,     label: "Reportes 2" },
+      { src: tp_reportes3,     label: "Reportes 3" },
+      { src: tp_reportes4,     label: "Reportes 4" },
+      { src: tp_configuracion, label: "Configuración" },
     ],
     planes: [
       {
@@ -245,12 +260,12 @@ export const SISTEMAS = [
       { nombre: "Tarjeta crédito", icono: "💳" },
     ],
     requisitos: [
-  { label: "Dispositivo",   valor: "PC, tablet o celular" },
-  { label: "Sistema",       valor: "Cualquier navegador moderno" },
-  { label: "Conexión",      valor: "Requiere internet" },
-  { label: "Instalación",   valor: "No requiere instalar nada" },
-  { label: "Acceso",        valor: "Desde cualquier lugar" },
-],
+      { label: "Dispositivo",  valor: "PC, tablet o celular" },
+      { label: "Sistema",      valor: "Cualquier navegador moderno" },
+      { label: "Conexión",     valor: "Requiere internet" },
+      { label: "Instalación",  valor: "No requiere instalar nada" },
+      { label: "Acceso",       valor: "Desde cualquier lugar" },
+    ],
     faq: [
       {
         pregunta: "¿Puedo probar TechPro antes de pagar?",

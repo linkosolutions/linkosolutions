@@ -6,8 +6,8 @@ import SobreMi from "./components/SobreMi"
 import Contacto from "./components/Contacto"
 import Footer from "./components/Footer"
 import ComerciOSPage from "./pages/ComerciOS"
+import TechProPage from "./pages/TechPro"
 
-// Página principal
 function Home() {
   return (
     <>
@@ -28,8 +28,9 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* ✏️ Para agregar más páginas de sistemas, copiá esta línea */}
         <Route path="/comercios" element={<ComerciOSPage />} />
+        {/* ✏️ Para agregar más sistemas, copiá esta línea */}
+        <Route path="/techpro" element={<TechProPage />} />
       </Routes>
     </BrowserRouter>
   )

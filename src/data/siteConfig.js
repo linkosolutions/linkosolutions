@@ -37,9 +37,9 @@ export const SITE = {
   name: "LinkoSolutions",
   tagline: "Software para comercios",
   whatsapp: "5491157038075",
-  whatsappMessage: "Hola! Me interesa una demo de ComerciOS.",
-  email: "contacto@linkosolutions.com",
-  instagram: "https://instagram.com/linkosolutions",
+  whatsappMessage: "Hola! Me interesa conocer más sobre sus sistemas.",
+  email: "linkosolutionss@gmail.com",
+  instagram: "https://instagram.com/linkosolutionss",
   linkedin: "",
 }
 

@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react"
 import { NAV_LINKS, SITE } from "../data/siteConfig"
+import { useCurrency } from "../context/CurrencyContext"
+
+const CURRENCIES = ["ARS", "USD"]
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const { currency, setCurrency } = useCurrency()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -17,20 +21,16 @@ export default function Navbar() {
   }
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-  ? "bg-slate-light/90 backdrop-blur-md shadow-sm border-b border-slate-mid"
-  : "bg-ink/60 backdrop-blur-md"
-      }`}
-    >
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      scrolled
+        ? "bg-slate-light/90 backdrop-blur-md shadow-sm border-b border-slate-mid"
+        : "bg-ink/60 backdrop-blur-md"
+    }`}>
       <nav className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+
         {/* Logo */}
-        <button
-          onClick={() => handleNav("#inicio")}
-          className={`font-display font-bold text-xl tracking-tight ${scrolled ? "text-ink" : "text-white"}`}
-        >
-          {/* ✏️ MODIFICAR: Logo texto */}
+        <button onClick={() => handleNav("#inicio")}
+          className={`font-display font-bold text-xl tracking-tight ${scrolled ? "text-ink" : "text-white"}`}>
           Linko<span className="text-accent">Solutions</span>
         </button>
 
@@ -38,63 +38,59 @@ export default function Navbar() {
         <ul className="hidden md:flex items-center gap-8">
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
-              <button
-                onClick={() => handleNav(link.href)}
-                className={`font-body text-sm font-medium transition-colors duration-200 hover:text-accent ${scrolled ? "text-ink/60 hover:text-ink" : "text-white/70 hover:text-white"}`}
-              >
+              <button onClick={() => handleNav(link.href)}
+                className={`font-body text-sm font-medium transition-colors duration-200 hover:text-accent ${
+                  scrolled ? "text-ink/60 hover:text-ink" : "text-white/70 hover:text-white"
+                }`}>
                 {link.label}
               </button>
             </li>
           ))}
         </ul>
 
-        {/* CTA desktop */}
-        <a
-          href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(SITE.whatsappMessage)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hidden md:inline-flex items-center gap-2 bg-accent text-ink font-body font-semibold text-sm px-4 py-2 rounded-full hover:bg-accent-dark transition-colors duration-200"
-        >
-          <WhatsAppIcon />
-          Demo gratis
-        </a>
+        {/* Right side: currency + CTA */}
+        <div className="hidden md:flex items-center gap-3">
+          {/* ── Selector de moneda ── */}
+          <CurrencySelector currency={currency} setCurrency={setCurrency} scrolled={scrolled} />
+
+          {/* CTA */}
+          <a
+            href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(SITE.whatsappMessage)}`}
+            target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-accent text-ink font-body font-semibold text-sm px-4 py-2 rounded-full hover:bg-accent-dark transition-colors duration-200">
+            <WhatsAppIcon />
+            Demo gratis
+          </a>
+        </div>
 
         {/* Hamburger */}
-        <button
-          className="md:hidden p-2 text-ink"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Menú"
-        >
-          <div className={`w-5 h-px transition-all duration-300 ${scrolled ? "bg-ink" : "bg-white"} ${menuOpen ? "rotate-45 translate-y-1" : ""}`} />
-          <div className={`w-5 h-px mt-1.5 transition-all duration-300 ${scrolled ? "bg-ink" : "bg-white"} ${menuOpen ? "opacity-0" : ""}`} />
-          <div className={`w-5 h-px mt-1.5 transition-all duration-300 ${scrolled ? "bg-ink" : "bg-white"} ${menuOpen ? "-rotate-45 -translate-y-2.5" : ""}`} />
-        </button>
+        <div className="md:hidden flex items-center gap-3">
+          <CurrencySelector currency={currency} setCurrency={setCurrency} scrolled={scrolled} />
+          <button className="p-2" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menú">
+            <div className={`w-5 h-px transition-all duration-300 ${scrolled ? "bg-ink" : "bg-white"} ${menuOpen ? "rotate-45 translate-y-1" : ""}`} />
+            <div className={`w-5 h-px mt-1.5 transition-all duration-300 ${scrolled ? "bg-ink" : "bg-white"} ${menuOpen ? "opacity-0" : ""}`} />
+            <div className={`w-5 h-px mt-1.5 transition-all duration-300 ${scrolled ? "bg-ink" : "bg-white"} ${menuOpen ? "-rotate-45 -translate-y-2.5" : ""}`} />
+          </button>
+        </div>
       </nav>
 
       {/* Mobile menu */}
-      <div
-        className={`md:hidden overflow-hidden transition-all duration-300 bg-slate-light border-b border-slate-mid ${
-          menuOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
-        }`}
-      >
+      <div className={`md:hidden overflow-hidden transition-all duration-300 bg-slate-light border-b border-slate-mid ${
+        menuOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
+      }`}>
         <ul className="px-6 py-4 flex flex-col gap-4">
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
-              <button
-                onClick={() => handleNav(link.href)}
-                className="font-body text-sm font-medium text-ink/70 hover:text-accent transition-colors"
-              >
+              <button onClick={() => handleNav(link.href)}
+                className="font-body text-sm font-medium text-ink/70 hover:text-accent transition-colors">
                 {link.label}
               </button>
             </li>
           ))}
           <li>
-            <a
-              href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(SITE.whatsappMessage)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-accent text-ink font-semibold text-sm px-4 py-2 rounded-full"
-            >
+            <a href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(SITE.whatsappMessage)}`}
+              target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-accent text-ink font-semibold text-sm px-4 py-2 rounded-full">
               <WhatsAppIcon />
               Demo gratis
             </a>
@@ -102,6 +98,54 @@ export default function Navbar() {
         </ul>
       </div>
     </header>
+  )
+}
+
+// ── Selector de moneda ──
+function CurrencySelector({ currency, setCurrency, scrolled }) {
+  const [open, setOpen] = useState(false)
+
+  const flags = { ARS: "🇦🇷", USD: "🇺🇸" }
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className={`flex items-center gap-1.5 text-sm font-body font-medium px-3 py-1.5 rounded-full border transition-all duration-200 ${
+          scrolled
+            ? "border-slate-mid text-ink/70 hover:border-accent/40 hover:text-ink bg-white"
+            : "border-white/20 text-white/70 hover:border-white/40 hover:text-white bg-white/10"
+        }`}
+      >
+        <span>{flags[currency]}</span>
+        <span>{currency}</span>
+        <svg className={`w-3 h-3 transition-transform ${open ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="absolute top-full right-0 mt-1 bg-white border border-slate-mid rounded-xl shadow-lg overflow-hidden z-50 min-w-[100px]">
+          {CURRENCIES.map((c) => (
+            <button
+              key={c}
+              onClick={() => { setCurrency(c); setOpen(false) }}
+              className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-sm font-body transition-colors hover:bg-slate-light ${
+                currency === c ? "text-accent font-semibold bg-accent/5" : "text-ink/70"
+              }`}
+            >
+              <span>{flags[c]}</span>
+              <span>{c}</span>
+              {currency === c && (
+                <svg className="w-3 h-3 text-accent ml-auto" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
 

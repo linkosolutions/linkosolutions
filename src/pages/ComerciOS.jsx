@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import { SISTEMAS, SITE } from "../data/siteConfig"
+import { useCurrency } from "../context/CurrencyContext"
+import CurrencyNavbar from "../components/CurrencyPageNavbar"
 
 const sistema = SISTEMAS.find(s => s.slug === "comercios")
 
@@ -11,7 +13,7 @@ export default function ComerciOSPage() {
 
   return (
     <div className="min-h-screen bg-slate-light font-body">
-      <PageNavbar />
+      <CurrencyNavbar waText="Hola! Quiero comprar ComerciOS." ctaLabel="Comprar ahora" />
       <HeroProducto />
       <CarruselSeccion />
       <FeaturesSeccion />
@@ -26,33 +28,11 @@ export default function ComerciOSPage() {
   )
 }
 
-// ── Navbar ──
-function PageNavbar() {
-  const waUrl = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hola! Quiero comprar ComerciOS.")}`
-  return (
-    <header className="sticky top-0 z-50 bg-slate-light/90 backdrop-blur-md border-b border-slate-mid">
-      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <a href="/" className="font-display font-bold text-xl text-ink">
-          Linko<span className="text-accent">Solutions</span>
-        </a>
-        <a
-          href={waUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 bg-accent text-ink font-semibold text-sm px-4 py-2 rounded-full hover:bg-accent-dark transition-colors"
-        >
-          <WhatsAppIcon />
-          Comprar ahora
-        </a>
-      </div>
-    </header>
-  )
-}
-
-// ── Hero ──
 function HeroProducto() {
+  const { currency } = useCurrency()
   const waComprar = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hola! Quiero comprar ComerciOS.")}`
   const waDemo = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hola! Quiero una demo de ComerciOS.")}`
+  const precio = sistema.planes[0].precios[currency]
 
   return (
     <section className="relative bg-ink overflow-hidden py-24 md:py-36">
@@ -61,41 +41,24 @@ function HeroProducto() {
         backgroundSize: "60px 60px",
       }} />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-accent/10 blur-[100px]" />
-
       <div className="relative max-w-6xl mx-auto px-6 text-center">
         <span className="inline-flex items-center gap-2 bg-accent/10 border border-accent/20 text-accent text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
           <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
           {sistema.badge}
         </span>
-
-        <h1 className="font-display font-extrabold text-5xl md:text-7xl text-white tracking-tight mb-6">
-          {sistema.name}
-        </h1>
-
-        <p className="font-body text-xl text-white/50 max-w-2xl mx-auto leading-relaxed mb-10">
-          {sistema.description}
-        </p>
-
+        <h1 className="font-display font-extrabold text-5xl md:text-7xl text-white tracking-tight mb-6">{sistema.name}</h1>
+        <p className="font-body text-xl text-white/50 max-w-2xl mx-auto leading-relaxed mb-10">{sistema.description}</p>
         <div className="flex flex-wrap gap-4 justify-center">
-          <a
-            href={waComprar}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-ink font-bold text-base px-8 py-4 rounded-full transition-all duration-200 shadow-lg shadow-accent/20 hover:-translate-y-0.5"
-          >
+          <a href={waComprar} target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-ink font-bold text-base px-8 py-4 rounded-full transition-all duration-200 shadow-lg shadow-accent/20 hover:-translate-y-0.5">
             <WhatsAppIcon />
-            Comprar — {sistema.planes[0].precio}
+            Comprar — {precio.monto}
           </a>
-          <a
-            href={waDemo}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 border border-white/20 text-white/70 hover:text-white hover:border-white/40 font-medium text-base px-8 py-4 rounded-full transition-all duration-200"
-          >
+          <a href={waDemo} target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 border border-white/20 text-white/70 hover:text-white hover:border-white/40 font-medium text-base px-8 py-4 rounded-full transition-all duration-200">
             Pedir demo gratis
           </a>
         </div>
-
         <div className="flex flex-wrap justify-center gap-6 mt-12">
           {["✓ Instalación incluida", "✓ Soporte incluido", "✓ Sin internet", "✓ Pago único"].map((item, i) => (
             <span key={i} className="text-white/30 text-sm font-body">{item}</span>
@@ -106,12 +69,12 @@ function HeroProducto() {
   )
 }
 
-// ── Carrusel ──
 function CarruselSeccion() {
   const [current, setCurrent] = useState(0)
   const [lightbox, setLightbox] = useState(false)
   const fotos = sistema.screenshots
   const dragStart = useRef(null)
+  const isDragging = useRef(false)
   const [dragOffset, setDragOffset] = useState(0)
 
   const prev = () => setCurrent(i => i === 0 ? fotos.length - 1 : i - 1)
@@ -133,9 +96,15 @@ function CarruselSeccion() {
     return () => window.removeEventListener("keydown", onKey)
   }, [lightbox, current])
 
-  const onMouseDown = (e) => { dragStart.current = e.clientX }
-  const onMouseMove = (e) => { if (dragStart.current !== null) setDragOffset(e.clientX - dragStart.current) }
+  const onMouseDown = (e) => { dragStart.current = e.clientX; isDragging.current = false }
+  const onMouseMove = (e) => {
+    if (dragStart.current === null) return
+    const diff = e.clientX - dragStart.current
+    if (Math.abs(diff) > 5) isDragging.current = true
+    setDragOffset(diff)
+  }
   const onMouseUp = () => {
+    if (dragStart.current === null) return
     if (Math.abs(dragOffset) > 60) dragOffset < 0 ? next() : prev()
     dragStart.current = null; setDragOffset(0)
   }
@@ -153,20 +122,13 @@ function CarruselSeccion() {
           <span className="text-xs font-semibold uppercase tracking-widest text-accent">Capturas del sistema</span>
           <h2 className="font-display font-bold text-3xl md:text-4xl text-white mt-2">El sistema en acción</h2>
         </div>
-
-        <div
-          className="relative aspect-video bg-ink/50 rounded-2xl overflow-hidden border border-white/10 cursor-grab active:cursor-grabbing select-none"
+        <div className="relative aspect-video bg-ink/50 rounded-2xl overflow-hidden border border-white/10 cursor-grab active:cursor-grabbing select-none"
           onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp} onMouseLeave={onMouseUp}
-          onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}
-        >
-          <img
-            src={fotos[current].src}
-            alt={fotos[current].label}
-            draggable={false}
-            onClick={() => setLightbox(true)}
+          onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
+          <img src={fotos[current].src} alt={fotos[current].label} draggable={false}
+            onClick={() => { if (!isDragging.current) setLightbox(true) }}
             style={{ transform: `translateX(${dragOffset}px)`, transition: dragOffset === 0 ? "transform 0.2s ease" : "none" }}
-            className="w-full h-full object-cover cursor-zoom-in"
-          />
+            className="w-full h-full object-cover cursor-zoom-in" />
           <div className="absolute top-3 left-3 bg-black/50 backdrop-blur-sm text-white/80 text-xs px-2.5 py-1 rounded-full flex items-center gap-1.5 cursor-pointer" onClick={() => setLightbox(true)}>
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg>
             Ver en grande
@@ -182,7 +144,8 @@ function CarruselSeccion() {
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent pt-6 pb-2 px-2">
             <div className="flex gap-1.5 overflow-x-auto pb-1">
               {fotos.map((foto, i) => (
-                <button key={i} onClick={() => setCurrent(i)} className={`flex-shrink-0 w-14 h-9 rounded overflow-hidden border-2 transition-all ${i === current ? "border-accent" : "border-transparent opacity-40 hover:opacity-70"}`}>
+                <button key={i} onClick={() => setCurrent(i)}
+                  className={`flex-shrink-0 w-14 h-9 rounded overflow-hidden border-2 transition-all ${i === current ? "border-accent" : "border-transparent opacity-40 hover:opacity-70"}`}>
                   <img src={foto.src} alt={foto.label} draggable={false} className="w-full h-full object-cover" />
                 </button>
               ))}
@@ -190,7 +153,6 @@ function CarruselSeccion() {
           </div>
         </div>
       </div>
-
       {lightbox && (
         <div className="fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center" onClick={() => setLightbox(false)}>
           <div className="relative max-w-5xl w-full px-4" onClick={e => e.stopPropagation()}>
@@ -214,7 +176,6 @@ function CarruselSeccion() {
   )
 }
 
-// ── Features ──
 function FeaturesSeccion() {
   return (
     <section className="py-20 bg-slate-light">
@@ -240,9 +201,10 @@ function FeaturesSeccion() {
   )
 }
 
-// ── Precios ──
 function PreciosSeccion() {
+  const { currency } = useCurrency()
   const plan = sistema.planes[0]
+  const precio = plan.precios[currency]
   const waUrl = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(`Hola! Quiero comprar ${plan.nombre}.`)}`
 
   return (
@@ -253,17 +215,14 @@ function PreciosSeccion() {
           <h2 className="font-display font-bold text-3xl md:text-4xl text-white mt-2">Simple y transparente</h2>
           <p className="text-white/40 mt-3">Sin suscripciones. Pagás una vez y es tuyo para siempre.</p>
         </div>
-
         <div className="max-w-md mx-auto">
           <div className="bg-white/5 border border-accent/30 rounded-2xl p-8 relative">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-ink text-xs font-bold px-4 py-1 rounded-full">
-              ✓ Pago único
-            </div>
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-ink text-xs font-bold px-4 py-1 rounded-full">✓ Pago único</div>
             <h3 className="font-display font-bold text-2xl text-white mb-1">{plan.nombre}</h3>
             <p className="text-white/40 text-sm mb-6">{plan.descripcion}</p>
             <div className="flex items-end gap-2 mb-8">
-              <span className="font-display font-extrabold text-5xl text-accent">{plan.precio}</span>
-              <span className="text-white/40 text-sm mb-2">{plan.precioDetalle}</span>
+              <span className="font-display font-extrabold text-5xl text-accent">{precio.monto}</span>
+              <span className="text-white/40 text-sm mb-2">{precio.detalle}</span>
             </div>
             <ul className="space-y-3 mb-8">
               {plan.features.map((f, i) => (
@@ -283,12 +242,8 @@ function PreciosSeccion() {
                 </li>
               ))}
             </ul>
-            <a
-              href={waUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full bg-accent hover:bg-accent-dark text-ink font-bold text-sm py-4 rounded-xl transition-colors"
-            >
+            <a href={waUrl} target="_blank" rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 w-full bg-accent hover:bg-accent-dark text-ink font-bold text-sm py-4 rounded-xl transition-colors">
               <WhatsAppIcon />
               Comprar por WhatsApp
             </a>
@@ -299,8 +254,9 @@ function PreciosSeccion() {
   )
 }
 
-// ── Adicionales ──
 function AdicionalesSeccion() {
+  const { currency } = useCurrency()
+
   return (
     <section className="py-20 bg-slate-light">
       <div className="max-w-6xl mx-auto px-6">
@@ -310,25 +266,20 @@ function AdicionalesSeccion() {
         </div>
         <div className="max-w-2xl mx-auto grid gap-6">
           {sistema.adicionales.map((item, i) => {
+            const precio = item.precios[currency]
             const waUrl = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(`Hola! Me interesa el adicional: ${item.nombre}`)}`
             return (
               <div key={i} className="bg-white border border-slate-mid rounded-2xl p-8 flex flex-col md:flex-row md:items-center gap-6">
-                <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center text-2xl flex-shrink-0">
-                  {item.icono}
-                </div>
+                <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center text-2xl flex-shrink-0">{item.icono}</div>
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-1">
                     <h3 className="font-display font-bold text-lg text-ink">{item.nombre}</h3>
-                    <span className="font-display font-bold text-accent">{item.precio}</span>
+                    <span className="font-display font-bold text-accent">{precio.monto}</span>
                   </div>
                   <p className="font-body text-ink/60 text-sm">{item.descripcion}</p>
                 </div>
-                <a
-                  href={waUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-dark text-ink font-semibold text-sm px-5 py-2.5 rounded-xl transition-colors flex-shrink-0"
-                >
+                <a href={waUrl} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-dark text-ink font-semibold text-sm px-5 py-2.5 rounded-xl transition-colors flex-shrink-0">
                   <WhatsAppIcon />
                   Consultar
                 </a>
@@ -341,7 +292,6 @@ function AdicionalesSeccion() {
   )
 }
 
-// ── Medios de pago ──
 function MediosPagoSeccion() {
   return (
     <section className="py-16 bg-white border-y border-slate-mid">
@@ -358,15 +308,12 @@ function MediosPagoSeccion() {
             </div>
           ))}
         </div>
-        <p className="text-center text-ink/40 text-xs mt-6 font-body">
-          Coordiná el pago directamente por WhatsApp.
-        </p>
+        <p className="text-center text-ink/40 text-xs mt-6 font-body">Coordiná el pago directamente por WhatsApp.</p>
       </div>
     </section>
   )
 }
 
-// ── Requisitos ──
 function RequisitosSeccion() {
   return (
     <section className="py-20 bg-slate-light">
@@ -388,10 +335,8 @@ function RequisitosSeccion() {
   )
 }
 
-// ── FAQ ──
 function FaqSeccion() {
   const [open, setOpen] = useState(null)
-
   return (
     <section className="py-20 bg-ink">
       <div className="max-w-6xl mx-auto px-6">
@@ -402,20 +347,13 @@ function FaqSeccion() {
         <div className="max-w-2xl mx-auto space-y-3">
           {sistema.faq.map((item, i) => (
             <div key={i} className="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
-              <button
-                onClick={() => setOpen(open === i ? null : i)}
-                className="w-full flex items-center justify-between px-6 py-4 text-left"
-              >
+              <button onClick={() => setOpen(open === i ? null : i)} className="w-full flex items-center justify-between px-6 py-4 text-left">
                 <span className="font-body font-medium text-white text-sm pr-4">{item.pregunta}</span>
                 <svg className={`w-4 h-4 text-accent flex-shrink-0 transition-transform duration-200 ${open === i ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
-              {open === i && (
-                <div className="px-6 pb-4">
-                  <p className="font-body text-white/50 text-sm leading-relaxed">{item.respuesta}</p>
-                </div>
-              )}
+              {open === i && <div className="px-6 pb-4"><p className="font-body text-white/50 text-sm leading-relaxed">{item.respuesta}</p></div>}
             </div>
           ))}
         </div>
@@ -424,36 +362,25 @@ function FaqSeccion() {
   )
 }
 
-// ── CTA Final ──
 function CtaFinal() {
+  const { currency } = useCurrency()
+  const precio = sistema.planes[0].precios[currency]
   const waComprar = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hola! Quiero comprar ComerciOS.")}`
   const waDemo = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hola! Quiero una demo gratis de ComerciOS.")}`
 
   return (
     <section className="py-24 bg-accent">
       <div className="max-w-6xl mx-auto px-6 text-center">
-        <h2 className="font-display font-extrabold text-3xl md:text-5xl text-ink mb-4">
-          ¿Listo para ordenar tu comercio?
-        </h2>
-        <p className="font-body text-ink/60 text-lg mb-10 max-w-xl mx-auto">
-          Comprá hoy y empezá a trabajar ordenado desde mañana.
-        </p>
+        <h2 className="font-display font-extrabold text-3xl md:text-5xl text-ink mb-4">¿Listo para ordenar tu comercio?</h2>
+        <p className="font-body text-ink/60 text-lg mb-10 max-w-xl mx-auto">Comprá hoy y empezá a trabajar ordenado desde mañana.</p>
         <div className="flex flex-wrap gap-4 justify-center">
-          <a
-            href={waComprar}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-ink text-white font-bold text-base px-8 py-4 rounded-full hover:bg-ink/80 transition-colors shadow-xl"
-          >
+          <a href={waComprar} target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-ink text-white font-bold text-base px-8 py-4 rounded-full hover:bg-ink/80 transition-colors shadow-xl">
             <WhatsAppIcon />
-            Comprar — {sistema.planes[0].precio}
+            Comprar — {precio.monto}
           </a>
-          <a
-            href={waDemo}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 border-2 border-ink/20 text-ink font-medium text-base px-8 py-4 rounded-full hover:border-ink/40 transition-colors"
-          >
+          <a href={waDemo} target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 border-2 border-ink/20 text-ink font-medium text-base px-8 py-4 rounded-full hover:border-ink/40 transition-colors">
             Pedir demo gratis
           </a>
         </div>
@@ -462,14 +389,11 @@ function CtaFinal() {
   )
 }
 
-// ── Footer ──
 function PageFooter() {
   return (
     <footer className="bg-ink border-t border-white/5 py-8">
       <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-        <a href="/" className="font-display font-bold text-lg text-white">
-          Linko<span className="text-accent">Solutions</span>
-        </a>
+        <a href="/" className="font-display font-bold text-lg text-white">Linko<span className="text-accent">Solutions</span></a>
         <p className="font-body text-white/20 text-xs">© {new Date().getFullYear()} LinkoSolutions — Todos los derechos reservados</p>
         <a href="/" className="font-body text-white/40 hover:text-accent text-sm transition-colors">← Volver al inicio</a>
       </div>

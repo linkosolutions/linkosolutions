@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { CurrencyProvider } from "./context/CurrencyContext"
 import Navbar from "./components/Navbar"
 import Hero from "./components/Hero"
 import Sistemas from "./components/Sistemas"
@@ -25,13 +26,14 @@ function Home() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/comercios" element={<ComerciOSPage />} />
-        {/* ✏️ Para agregar más sistemas, copiá esta línea */}
-        <Route path="/techpro" element={<TechProPage />} />
-      </Routes>
-    </BrowserRouter>
+    <CurrencyProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/comercios" element={<ComerciOSPage />} />
+          <Route path="/techpro" element={<TechProPage />} />
+        </Routes>
+      </BrowserRouter>
+    </CurrencyProvider>
   )
 }

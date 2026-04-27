@@ -36,8 +36,7 @@ import tp_configuracion from '../assets/techpro/configuracion.png'
 export const SITE = {
   name: "LinkoSolutions",
   tagline: "Software para comercios",
-  // ✏️ Número de WhatsApp
-  whatsapp: "5491157038075",
+  whatsapp: "5491112345678",
   whatsappMessage: "Hola! Me interesa una demo de ComerciOS.",
   email: "contacto@linkosolutions.com",
   instagram: "https://instagram.com/linkosolutions",
@@ -94,8 +93,11 @@ export const SISTEMAS = [
       {
         id: "base",
         nombre: "ComerciOS Base",
-        precio: "$70.000",
-        precioDetalle: "pago único",
+        // ✏️ Precios por moneda
+        precios: {
+          ARS: { monto: "$70.000", detalle: "pago único" },
+          USD: { monto: "USD 50", detalle: "one-time payment" },
+        },
         descripcion: "Todo lo que necesitás para empezar a trabajar ordenado desde el primer día.",
         mpLink: "https://mpago.la/TU_LINK_AQUI",
         features: [
@@ -115,7 +117,11 @@ export const SISTEMAS = [
     adicionales: [
       {
         nombre: "Lector de códigos de barras",
-        precio: "$30.000",
+        // ✏️ Precios por moneda
+        precios: {
+          ARS: { monto: "$30.000", detalle: "pago único" },
+          USD: { monto: "USD 20", detalle: "one-time" },
+        },
         descripcion: "Agregá un lector de códigos compatible con ComerciOS para agilizar tus ventas y el control de stock.",
         mpLink: "https://mpago.la/TU_LINK_LECTOR",
         icono: "🔍",
@@ -200,8 +206,10 @@ export const SISTEMAS = [
       {
         id: "prueba",
         nombre: "Prueba gratuita",
-        precio: "Gratis",
-        precioDetalle: "7 días",
+        precios: {
+          ARS: { monto: "Gratis", detalle: "7 días" },
+          USD: { monto: "Free",   detalle: "7 days" },
+        },
         descripcion: "Probá TechPro con acceso Pro completo durante 7 días, sin tarjeta requerida.",
         features: [
           "Acceso completo por 7 días",
@@ -214,8 +222,11 @@ export const SISTEMAS = [
       {
         id: "basico",
         nombre: "Básico",
-        precio: "$15.000",
-        precioDetalle: "por mes",
+        // ✏️ Precios por moneda
+        precios: {
+          ARS: { monto: "$15.000", detalle: "por mes" },
+          USD: { monto: "USD 12",  detalle: "per month" },
+        },
         descripcion: "Ideal para locales pequeños que quieren empezar a trabajar ordenados.",
         features: [
           "2 usuarios",
@@ -232,8 +243,11 @@ export const SISTEMAS = [
       {
         id: "pro",
         nombre: "Pro",
-        precio: "$25.000",
-        precioDetalle: "por mes",
+        // ✏️ Precios por moneda
+        precios: {
+          ARS: { monto: "$25.000", detalle: "por mes" },
+          USD: { monto: "USD 20",  detalle: "per month" },
+        },
         descripcion: "Para locales que crecen y necesitan más control, usuarios y reportes detallados.",
         features: [
           "10 usuarios",

@@ -36,7 +36,7 @@ import tp_configuracion from '../assets/techpro/configuracion.png'
 export const SITE = {
   name: "LinkoSolutions",
   tagline: "Software para comercios",
-  whatsapp: "5491112345678",
+  whatsapp: "5491157038075",
   whatsappMessage: "Hola! Me interesa una demo de ComerciOS.",
   email: "contacto@linkosolutions.com",
   instagram: "https://instagram.com/linkosolutions",

@@ -49,16 +49,20 @@ function HeroProducto() {
         <p className="font-display font-semibold text-accent text-xl mb-6">{sistema.tagline}</p>
         <p className="font-body text-xl text-white/50 max-w-2xl mx-auto leading-relaxed mb-10">{sistema.description}</p>
         <div className="flex flex-wrap gap-4 justify-center">
-          <a href={waDemo} target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-ink font-bold text-base px-8 py-4 rounded-full transition-all duration-200 shadow-lg shadow-accent/20 hover:-translate-y-0.5">
-            <WhatsAppIcon />
-            Probar 7 días gratis
-          </a>
-          <a href={waInfo} target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 border border-white/20 text-white/70 hover:text-white hover:border-white/40 font-medium text-base px-8 py-4 rounded-full transition-all duration-200">
-            Consultar planes
-          </a>
-        </div>
+  <a href={waDemo} target="_blank" rel="noopener noreferrer"
+    className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-ink font-bold text-base px-8 py-4 rounded-full transition-all duration-200 shadow-lg shadow-accent/20 hover:-translate-y-0.5">
+    <WhatsAppIcon />
+    Probar 7 días gratis
+  </a>
+  <a href="https://linkotechpro.vercel.app" target="_blank" rel="noopener noreferrer"
+    className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-medium text-base px-8 py-4 rounded-full transition-all duration-200">
+    🚀 Acceder al sistema
+  </a>
+  <a href={waInfo} target="_blank" rel="noopener noreferrer"
+    className="inline-flex items-center gap-2 border border-white/20 text-white/70 hover:text-white hover:border-white/40 font-medium text-base px-8 py-4 rounded-full transition-all duration-200">
+    Consultar planes
+  </a>
+</div>
         <div className="flex flex-wrap justify-center gap-6 mt-12">
           {["✓ 7 días gratis", "✓ Sin tarjeta", "✓ ARS y USD", "✓ Multi-usuario"].map((item, i) => (
             <span key={i} className="text-white/30 text-sm font-body">{item}</span>
@@ -392,16 +396,20 @@ function CtaFinal() {
         <h2 className="font-display font-extrabold text-3xl md:text-5xl text-ink mb-4">Probalo gratis por 7 días</h2>
         <p className="font-body text-ink/60 text-lg mb-10 max-w-xl mx-auto">Sin tarjeta. Sin compromiso. Con acceso Pro completo desde el primer día.</p>
         <div className="flex flex-wrap gap-4 justify-center">
-          <a href={waDemo} target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-ink text-white font-bold text-base px-8 py-4 rounded-full hover:bg-ink/80 transition-colors shadow-xl">
-            <WhatsAppIcon />
-            Empezar prueba gratis
-          </a>
-          <a href={waInfo} target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 border-2 border-ink/20 text-ink font-medium text-base px-8 py-4 rounded-full hover:border-ink/40 transition-colors">
-            Consultar planes
-          </a>
-        </div>
+  <a href={waDemo} target="_blank" rel="noopener noreferrer"
+    className="inline-flex items-center gap-2 bg-ink text-white font-bold text-base px-8 py-4 rounded-full hover:bg-ink/80 transition-colors shadow-xl">
+    <WhatsAppIcon />
+    Empezar prueba gratis
+  </a>
+  <a href="https://linkotechpro.vercel.app" target="_blank" rel="noopener noreferrer"
+    className="inline-flex items-center gap-2 bg-ink/80 text-white font-medium text-base px-8 py-4 rounded-full hover:bg-ink/60 transition-colors">
+    🚀 Acceder al sistema
+  </a>
+  <a href={waInfo} target="_blank" rel="noopener noreferrer"
+    className="inline-flex items-center gap-2 border-2 border-ink/20 text-ink font-medium text-base px-8 py-4 rounded-full hover:border-ink/40 transition-colors">
+    Consultar planes
+  </a>
+</div>
       </div>
     </section>
   )

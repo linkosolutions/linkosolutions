@@ -58,10 +58,11 @@ function HeroProducto() {
     className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-medium text-base px-8 py-4 rounded-full transition-all duration-200">
     🚀 Acceder al sistema
   </a>
-  <a href={waInfo} target="_blank" rel="noopener noreferrer"
-    className="inline-flex items-center gap-2 border border-white/20 text-white/70 hover:text-white hover:border-white/40 font-medium text-base px-8 py-4 rounded-full transition-all duration-200">
-    Consultar planes
-  </a>
+  <button
+  onClick={() => document.querySelector("#planes")?.scrollIntoView({ behavior: "smooth" })}
+  className="inline-flex items-center gap-2 border border-white/20 text-white/70 hover:text-white hover:border-white/40 font-medium text-base px-8 py-4 rounded-full transition-all duration-200">
+  Consultar planes
+</button>
 </div>
         <div className="flex flex-wrap justify-center gap-6 mt-12">
           {["✓ 7 días gratis", "✓ Sin tarjeta", "✓ ARS y USD", "✓ Multi-usuario"].map((item, i) => (
@@ -258,7 +259,7 @@ function PreciosSeccion() {
   const waDemo = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hola! Quiero empezar la prueba gratuita de TechPro.")}`
 
   return (
-    <section className="py-20 bg-slate-light">
+    <section id="planes" className="py-20 bg-slate-light">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-14">
           <span className="text-xs font-semibold uppercase tracking-widest text-accent">Planes</span>

@@ -93,10 +93,9 @@ export const SISTEMAS = [
       {
         id: "base",
         nombre: "ComerciOS Base",
-        // ✏️ Precios por moneda
         precios: {
           ARS: { monto: "$70.000", detalle: "pago único" },
-          USD: { monto: "USD 50", detalle: "one-time payment" },
+          USD: { monto: "USD 50",  detalle: "one-time payment" },
         },
         descripcion: "Todo lo que necesitás para empezar a trabajar ordenado desde el primer día.",
         mpLink: "https://mpago.la/TU_LINK_AQUI",
@@ -117,10 +116,9 @@ export const SISTEMAS = [
     adicionales: [
       {
         nombre: "Lector de códigos de barras",
-        // ✏️ Precios por moneda
         precios: {
           ARS: { monto: "$30.000", detalle: "pago único" },
-          USD: { monto: "USD 20", detalle: "one-time" },
+          USD: { monto: "USD 20",  detalle: "one-time" },
         },
         descripcion: "Agregá un lector de códigos compatible con ComerciOS para agilizar tus ventas y el control de stock.",
         mpLink: "https://mpago.la/TU_LINK_LECTOR",
@@ -207,8 +205,8 @@ export const SISTEMAS = [
         id: "prueba",
         nombre: "Prueba gratuita",
         precios: {
-          ARS: { monto: "Gratis", detalle: "7 días" },
-          USD: { monto: "Free",   detalle: "7 days" },
+          ARS: { mensual: { monto: "Gratis", detalle: "7 días" },   anual: { monto: "Gratis", detalle: "7 días" } },
+          USD: { mensual: { monto: "Free",   detalle: "7 days" },   anual: { monto: "Free",   detalle: "7 days" } },
         },
         descripcion: "Probá TechPro con acceso Pro completo durante 7 días, sin tarjeta requerida.",
         features: [
@@ -222,10 +220,16 @@ export const SISTEMAS = [
       {
         id: "basico",
         nombre: "Básico",
-        // ✏️ Precios por moneda
+        // ✏️ Precios por moneda y periodicidad
         precios: {
-          ARS: { monto: "$15.000", detalle: "por mes" },
-          USD: { monto: "USD 12",  detalle: "per month" },
+          ARS: {
+            mensual: { monto: "$15.000",  detalle: "por mes" },
+            anual:   { monto: "$153.000", detalle: "por año", porMes: "$12.750/mes" },
+          },
+          USD: {
+            mensual: { monto: "USD 12",  detalle: "per month" },
+            anual:   { monto: "USD 122", detalle: "per year", porMes: "USD 10.2/mo" },
+          },
         },
         descripcion: "Ideal para locales pequeños que quieren empezar a trabajar ordenados.",
         features: [
@@ -236,6 +240,8 @@ export const SISTEMAS = [
           "Agenda de citas",
           "Clientes y proveedores",
           "Reportes básicos",
+          "Exportar a Excel",
+          "Ticket de venta en PDF",
           "Soporte por WhatsApp",
         ],
         noIncluye: ["Reportes avanzados Pro", "Más de 2 usuarios"],
@@ -243,10 +249,16 @@ export const SISTEMAS = [
       {
         id: "pro",
         nombre: "Pro",
-        // ✏️ Precios por moneda
+        // ✏️ Precios por moneda y periodicidad
         precios: {
-          ARS: { monto: "$25.000", detalle: "por mes" },
-          USD: { monto: "USD 20",  detalle: "per month" },
+          ARS: {
+            mensual: { monto: "$25.000",  detalle: "por mes" },
+            anual:   { monto: "$255.000", detalle: "por año", porMes: "$21.250/mes" },
+          },
+          USD: {
+            mensual: { monto: "USD 20",  detalle: "per month" },
+            anual:   { monto: "USD 204", detalle: "per year", porMes: "USD 17/mo" },
+          },
         },
         descripcion: "Para locales que crecen y necesitan más control, usuarios y reportes detallados.",
         features: [
@@ -257,9 +269,13 @@ export const SISTEMAS = [
           "Agenda de citas",
           "Clientes y proveedores",
           "Reportes básicos y avanzados",
+          "Exportar a Excel",
+          "Ticket de venta en PDF",
+          "Deudas y cuotas",
           "Ranking de clientes",
           "Equipos parados +60 días",
           "Ventas por vendedor",
+          "Anuncios del sistema",
           "Soporte prioritario",
         ],
         noIncluye: [],
@@ -303,7 +319,11 @@ export const SISTEMAS = [
       },
       {
         pregunta: "¿Qué diferencia hay entre Básico y Pro?",
-        respuesta: "El plan Básico tiene 2 usuarios y 50 equipos con reportes básicos. El plan Pro tiene 10 usuarios, equipos ilimitados y reportes avanzados con análisis de márgenes, vendedores y clientes.",
+        respuesta: "El plan Básico tiene 2 usuarios y 50 equipos con reportes básicos. El plan Pro tiene 10 usuarios, equipos ilimitados, reportes avanzados, deudas y cuotas, y más.",
+      },
+      {
+        pregunta: "¿Qué descuento tiene el plan anual?",
+        respuesta: "El plan anual tiene un 15% de descuento respecto al precio mensual. Es la mejor opción si ya sabés que lo vas a usar todo el año.",
       },
     ],
     ctaLabel: "Ver más info",

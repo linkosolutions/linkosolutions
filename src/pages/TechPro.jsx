@@ -29,7 +29,6 @@ export default function TechProPage() {
 }
 
 function HeroProducto() {
-  const { currency } = useCurrency()
   const waDemo = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hola! Quiero empezar la prueba gratuita de TechPro.")}`
   const waInfo = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hola! Quiero más info sobre TechPro.")}`
 
@@ -49,21 +48,21 @@ function HeroProducto() {
         <p className="font-display font-semibold text-accent text-xl mb-6">{sistema.tagline}</p>
         <p className="font-body text-xl text-white/50 max-w-2xl mx-auto leading-relaxed mb-10">{sistema.description}</p>
         <div className="flex flex-wrap gap-4 justify-center">
-  <a href={waDemo} target="_blank" rel="noopener noreferrer"
-    className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-ink font-bold text-base px-8 py-4 rounded-full transition-all duration-200 shadow-lg shadow-accent/20 hover:-translate-y-0.5">
-    <WhatsAppIcon />
-    Probar 7 días gratis
-  </a>
-  <a href="https://linkotechpro.vercel.app" target="_blank" rel="noopener noreferrer"
-    className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-medium text-base px-8 py-4 rounded-full transition-all duration-200">
-    🚀 Acceder al sistema
-  </a>
-  <button
-  onClick={() => document.querySelector("#planes")?.scrollIntoView({ behavior: "smooth" })}
-  className="inline-flex items-center gap-2 border border-white/20 text-white/70 hover:text-white hover:border-white/40 font-medium text-base px-8 py-4 rounded-full transition-all duration-200">
-  Consultar planes
-</button>
-</div>
+          <a href={waDemo} target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-ink font-bold text-base px-8 py-4 rounded-full transition-all duration-200 shadow-lg shadow-accent/20 hover:-translate-y-0.5">
+            <WhatsAppIcon />
+            Probar 7 días gratis
+          </a>
+          <a href="https://linkotechpro.vercel.app" target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-medium text-base px-8 py-4 rounded-full transition-all duration-200">
+            🚀 Acceder al sistema
+          </a>
+          <button
+            onClick={() => document.querySelector("#planes")?.scrollIntoView({ behavior: "smooth" })}
+            className="inline-flex items-center gap-2 border border-white/20 text-white/70 hover:text-white hover:border-white/40 font-medium text-base px-8 py-4 rounded-full transition-all duration-200">
+            Consultar planes
+          </button>
+        </div>
         <div className="flex flex-wrap justify-center gap-6 mt-12">
           {["✓ 7 días gratis", "✓ Sin tarjeta", "✓ ARS y USD", "✓ Multi-usuario"].map((item, i) => (
             <span key={i} className="text-white/30 text-sm font-body">{item}</span>
@@ -217,16 +216,16 @@ function FeaturesSeccion() {
 const MODULOS = [
   { icono: "📱", nombre: "Equipos", descripcion: "Alta por IMEI único, estados, historial, garantía automática al vender y búsqueda por IMEI, marca o modelo." },
   { icono: "📦", nombre: "Productos", descripcion: "Accesorios, repuestos y electrónica con precios en ARS y USD, control de stock y alertas de mínimo." },
-  { icono: "🛒", nombre: "Ventas", descripcion: "Ventas en ARS/USD, múltiples formas de pago, parte de pago, vuelto automático y descuentos." },
+  { icono: "🛒", nombre: "Ventas", descripcion: "Ventas en ARS/USD, múltiples formas de pago, parte de pago, vuelto automático, descuentos y ticket PDF." },
   { icono: "🔧", nombre: "Reparaciones", descripcion: "Órdenes de reparación con técnico asignado, historial de estados y seguimiento por cliente." },
   { icono: "📅", nombre: "Citas", descripcion: "Agenda con fecha y hora, estados y link directo a WhatsApp del cliente." },
-  { icono: "👥", nombre: "Clientes", descripcion: "Gestión de clientes con historial completo de compras y reparaciones." },
+  { icono: "👥", nombre: "Clientes", descripcion: "Gestión de clientes con historial completo de compras, reparaciones y deudas." },
   { icono: "🚚", nombre: "Proveedores", descripcion: "Alta de proveedores con CUIT, teléfono, email y asociación a productos y equipos." },
   { icono: "🔍", nombre: "Historial IMEI", descripcion: "Búsqueda de cualquier equipo por IMEI con historial completo de estados y garantía." },
-  { icono: "📊", nombre: "Reportes", descripcion: "Stock valorizado, garantías activas, top productos, ventas por vendedor y ranking de clientes." },
-  { icono: "🔐", nombre: "Multi-local", descripcion: "Cada local con sus propios datos aislados, registro propio y panel SuperAdmin." },
+  { icono: "📊", nombre: "Reportes", descripcion: "Stock valorizado, garantías activas, top productos, ventas por vendedor, ranking de clientes. Exportables a Excel." },
+  { icono: "💸", nombre: "Deudas y cuotas", descripcion: "Registrá deudas al vender, configurá cuotas, interés y fechas. Panel con colores por urgencia y pagos parciales." },
+  { icono: "🔐", nombre: "Multi-local", descripcion: "Cada local con sus propios datos aislados, registro propio y panel SuperAdmin con anuncios del sistema." },
   { icono: "⚙️", nombre: "Roles y usuarios", descripcion: "Admin, Vendedor, Técnico y Solo lectura. Controlá qué puede hacer cada uno." },
-  { icono: "💬", nombre: "Soporte", descripcion: "Botón flotante de WhatsApp en toda la app para contactarnos en cualquier momento." },
 ]
 
 function ModulosSeccion() {
@@ -254,34 +253,70 @@ function ModulosSeccion() {
   )
 }
 
+// ── Sección precios con toggle mensual/anual ──
 function PreciosSeccion() {
   const { currency } = useCurrency()
+  const [periodo, setPeriodo] = useState("mensual")
   const waDemo = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hola! Quiero empezar la prueba gratuita de TechPro.")}`
 
   return (
     <section id="planes" className="py-20 bg-slate-light">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center mb-14">
+        <div className="text-center mb-10">
           <span className="text-xs font-semibold uppercase tracking-widest text-accent">Planes</span>
           <h2 className="font-display font-bold text-3xl md:text-4xl text-ink mt-2">Elegí tu plan</h2>
           <p className="text-ink/40 mt-3">Empezá gratis. Escalá cuando lo necesites.</p>
         </div>
+
+        {/* Toggle mensual / anual */}
+        <div className="flex items-center justify-center gap-3 mb-12">
+          <span className={`font-body text-sm font-medium transition-colors ${periodo === "mensual" ? "text-ink" : "text-ink/40"}`}>
+            Mensual
+          </span>
+          <button
+            onClick={() => setPeriodo(p => p === "mensual" ? "anual" : "mensual")}
+            className={`relative w-12 h-6 rounded-full transition-colors duration-200 ${periodo === "anual" ? "bg-accent" : "bg-slate-mid"}`}
+          >
+            <span className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${periodo === "anual" ? "translate-x-7" : "translate-x-1"}`} />
+          </button>
+          <span className={`font-body text-sm font-medium transition-colors ${periodo === "anual" ? "text-ink" : "text-ink/40"}`}>
+            Anual
+          </span>
+          {periodo === "anual" && (
+            <span className="bg-accent/10 text-accent text-xs font-bold px-2.5 py-1 rounded-full">
+              15% OFF
+            </span>
+          )}
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {sistema.planes.map((plan) => {
-            const precio = plan.precios[currency]
-            const waComprar = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(`Hola! Quiero contratar el plan ${plan.nombre} de TechPro.`)}`
+            const precioData = plan.precios[currency]
+            const precio = precioData[periodo] || precioData.mensual
+            const waComprar = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(`Hola! Quiero contratar el plan ${plan.nombre} ${periodo} de TechPro.`)}`
             const esPrueba = plan.id === "prueba"
             const esPro = plan.destacado
 
             return (
               <div key={plan.id} className={`relative rounded-2xl p-8 flex flex-col ${esPro ? "bg-ink border-2 border-accent" : "bg-white border border-slate-mid"}`}>
                 {esPro && <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-ink text-xs font-bold px-4 py-1 rounded-full">⭐ Más popular</div>}
+
                 <h3 className={`font-display font-bold text-xl mb-1 ${esPro ? "text-white" : "text-ink"}`}>{plan.nombre}</h3>
                 <p className={`text-sm mb-6 ${esPro ? "text-white/40" : "text-ink/50"}`}>{plan.descripcion}</p>
-                <div className="flex items-end gap-2 mb-8">
-                  <span className={`font-display font-extrabold text-4xl ${esPro ? "text-accent" : "text-ink"}`}>{precio.monto}</span>
-                  <span className={`text-sm mb-1 ${esPro ? "text-white/40" : "text-ink/40"}`}>{precio.detalle}</span>
+
+                <div className="mb-8">
+                  <div className="flex items-end gap-2">
+                    <span className={`font-display font-extrabold text-4xl ${esPro ? "text-accent" : "text-ink"}`}>{precio.monto}</span>
+                    <span className={`text-sm mb-1 ${esPro ? "text-white/40" : "text-ink/40"}`}>{precio.detalle}</span>
+                  </div>
+                  {/* Precio por mes en plan anual */}
+                  {periodo === "anual" && precio.porMes && (
+                    <p className={`text-xs mt-1 ${esPro ? "text-accent/70" : "text-accent"}`}>
+                      ≈ {precio.porMes}
+                    </p>
+                  )}
                 </div>
+
                 <ul className="space-y-2.5 mb-8 flex-1">
                   {plan.features.map((f, i) => (
                     <li key={i} className={`flex items-start gap-2 text-sm ${esPro ? "text-white/70" : "text-ink/70"}`}>
@@ -300,6 +335,7 @@ function PreciosSeccion() {
                     </li>
                   ))}
                 </ul>
+
                 <a href={esPrueba ? waDemo : waComprar} target="_blank" rel="noopener noreferrer"
                   className={`flex items-center justify-center gap-2 w-full font-bold text-sm py-3.5 rounded-xl transition-colors ${
                     esPro ? "bg-accent hover:bg-accent-dark text-ink"
@@ -397,20 +433,20 @@ function CtaFinal() {
         <h2 className="font-display font-extrabold text-3xl md:text-5xl text-ink mb-4">Probalo gratis por 7 días</h2>
         <p className="font-body text-ink/60 text-lg mb-10 max-w-xl mx-auto">Sin tarjeta. Sin compromiso. Con acceso Pro completo desde el primer día.</p>
         <div className="flex flex-wrap gap-4 justify-center">
-  <a href={waDemo} target="_blank" rel="noopener noreferrer"
-    className="inline-flex items-center gap-2 bg-ink text-white font-bold text-base px-8 py-4 rounded-full hover:bg-ink/80 transition-colors shadow-xl">
-    <WhatsAppIcon />
-    Empezar prueba gratis
-  </a>
-  <a href="https://linkotechpro.vercel.app" target="_blank" rel="noopener noreferrer"
-    className="inline-flex items-center gap-2 bg-ink/80 text-white font-medium text-base px-8 py-4 rounded-full hover:bg-ink/60 transition-colors">
-    🚀 Acceder al sistema
-  </a>
-  <a href={waInfo} target="_blank" rel="noopener noreferrer"
-    className="inline-flex items-center gap-2 border-2 border-ink/20 text-ink font-medium text-base px-8 py-4 rounded-full hover:border-ink/40 transition-colors">
-    Consultar planes
-  </a>
-</div>
+          <a href={waDemo} target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-ink text-white font-bold text-base px-8 py-4 rounded-full hover:bg-ink/80 transition-colors shadow-xl">
+            <WhatsAppIcon />
+            Empezar prueba gratis
+          </a>
+          <a href="https://linkotechpro.vercel.app" target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-ink/80 text-white font-medium text-base px-8 py-4 rounded-full hover:bg-ink/60 transition-colors">
+            🚀 Acceder al sistema
+          </a>
+          <a href={waInfo} target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 border-2 border-ink/20 text-ink font-medium text-base px-8 py-4 rounded-full hover:border-ink/40 transition-colors">
+            Consultar planes
+          </a>
+        </div>
       </div>
     </section>
   )

@@ -21,7 +21,7 @@ export default function Sistemas() {
           {SISTEMAS.map((sistema) => (
             <SistemaCard key={sistema.id} sistema={sistema} />
           ))}
-          {SISTEMAS.length < 3 && <ProximamenteCard />}
+          {SITE.mostrarProximamente && <ProximamenteCard />}
         </div>
       </div>
     </section>

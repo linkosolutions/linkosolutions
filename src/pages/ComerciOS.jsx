@@ -13,10 +13,10 @@ export default function ComerciOSPage() {
 
   return (
     <div className="min-h-screen bg-slate-light font-body">
-      <CurrencyNavbar waText="Hola! Quiero comprar ComerciOS." ctaLabel="Comprar ahora" />
+      <CurrencyNavbar waText="Hola! Quiero probar ComerciOS 5 días gratis." ctaLabel="Probar gratis" />
       <HeroProducto />
+      <DestacadosSeccion />
       <CarruselSeccion />
-      <FeaturesSeccion />
       <PreciosSeccion />
       <AdicionalesSeccion />
       <MediosPagoSeccion />
@@ -30,9 +30,9 @@ export default function ComerciOSPage() {
 
 function HeroProducto() {
   const { currency } = useCurrency()
-  const waComprar = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hola! Quiero comprar ComerciOS.")}`
-  const waDemo = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hola! Quiero una demo de ComerciOS.")}`
-  const precio = sistema.planes[0].precios[currency]
+  const waProbar = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hola! Quiero probar ComerciOS 5 días gratis.")}`
+  const precio = sistema.planes.find(p => p.id === "licencia").precios[currency].mensual
+  const descarga = SITE.descargaComerciOS
 
   return (
     <section className="relative bg-ink overflow-hidden py-24 md:py-36">
@@ -49,18 +49,25 @@ function HeroProducto() {
         <h1 className="font-display font-extrabold text-5xl md:text-7xl text-white tracking-tight mb-6">{sistema.name}</h1>
         <p className="font-body text-xl text-white/50 max-w-2xl mx-auto leading-relaxed mb-10">{sistema.description}</p>
         <div className="flex flex-wrap gap-4 justify-center">
-          <a href={waComprar} target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-ink font-bold text-base px-8 py-4 rounded-full transition-all duration-200 shadow-lg shadow-accent/20 hover:-translate-y-0.5">
-            <WhatsAppIcon />
-            Comprar — {precio.monto}
-          </a>
-          <a href={waDemo} target="_blank" rel="noopener noreferrer"
+          {descarga ? (
+            <a href={descarga}
+              className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-ink font-bold text-base px-8 py-4 rounded-full transition-all duration-200 shadow-lg shadow-accent/20 hover:-translate-y-0.5">
+              ⬇️ Descargar y probar 5 días gratis
+            </a>
+          ) : (
+            <a href={waProbar} target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-ink font-bold text-base px-8 py-4 rounded-full transition-all duration-200 shadow-lg shadow-accent/20 hover:-translate-y-0.5">
+              <WhatsAppIcon />
+              Probar 5 días gratis
+            </a>
+          )}
+          <a href="#planes"
             className="inline-flex items-center gap-2 border border-white/20 text-white/70 hover:text-white hover:border-white/40 font-medium text-base px-8 py-4 rounded-full transition-all duration-200">
-            Pedir demo gratis
+            Ver planes — desde {precio.monto}/mes
           </a>
         </div>
         <div className="flex flex-wrap justify-center gap-6 mt-12">
-          {["✓ Instalación incluida", "✓ Soporte incluido", "✓ Sin internet", "✓ Pago único"].map((item, i) => (
+          {["✓ 5 días gratis, sin tarjeta", "✓ Facturación electrónica ARCA", "✓ Cobro con QR", "✓ Vendé sin internet"].map((item, i) => (
             <span key={i} className="text-white/30 text-sm font-body">{item}</span>
           ))}
         </div>
@@ -176,24 +183,27 @@ function CarruselSeccion() {
   )
 }
 
-function FeaturesSeccion() {
+function DestacadosSeccion() {
   return (
     <section className="py-20 bg-slate-light">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-14">
           <span className="text-xs font-semibold uppercase tracking-widest text-accent">Funcionalidades</span>
-          <h2 className="font-display font-bold text-3xl md:text-4xl text-ink mt-2">Todo lo que incluye</h2>
+          <h2 className="font-display font-bold text-3xl md:text-4xl text-ink mt-2">Todo lo que necesita tu comercio</h2>
+          <p className="text-ink/50 mt-3 max-w-xl mx-auto">Cada venta descuenta stock, suma a la caja y queda registrada. Sin planillas ni cuadernos.</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {sistema.features.map((f, i) => (
-            <div key={i} className="flex items-center gap-3 bg-white border border-slate-mid rounded-xl px-5 py-4">
-              <span className="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
-                <svg className="w-3.5 h-3.5 text-accent" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-              </span>
-              <span className="font-body text-sm text-ink/80">{f}</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {sistema.destacados.map((d, i) => (
+            <div key={i} className="bg-white border border-slate-mid rounded-2xl p-6 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5 transition-all duration-200">
+              <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center text-2xl mb-4">{d.icono}</div>
+              <h3 className="font-display font-bold text-lg text-ink mb-2">{d.titulo}</h3>
+              <p className="font-body text-sm text-ink/60 leading-relaxed">{d.texto}</p>
             </div>
+          ))}
+        </div>
+        <div className="flex flex-wrap justify-center gap-2 mt-10">
+          {["Ventas y caja", "Stock", "Clientes y fiado", "Compras y proveedores", "Gastos", "Empleados y sueldos", "Reportes", "Usuarios con roles"].map((t, i) => (
+            <span key={i} className="bg-white border border-slate-mid text-ink/60 text-xs font-medium px-3 py-1.5 rounded-full">{t}</span>
           ))}
         </div>
       </div>
@@ -203,52 +213,89 @@ function FeaturesSeccion() {
 
 function PreciosSeccion() {
   const { currency } = useCurrency()
-  const plan = sistema.planes[0]
-  const precio = plan.precios[currency]
-  const waUrl = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(`Hola! Quiero comprar ${plan.nombre}.`)}`
+  const [periodo, setPeriodo] = useState("mensual")
+  const waProbar = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hola! Quiero empezar la prueba gratuita de ComerciOS.")}`
+  const descarga = SITE.descargaComerciOS
 
   return (
-    <section className="py-20 bg-ink">
+    <section id="planes" className="py-20 bg-ink">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center mb-14">
+        <div className="text-center mb-10">
           <span className="text-xs font-semibold uppercase tracking-widest text-accent">Precio</span>
           <h2 className="font-display font-bold text-3xl md:text-4xl text-white mt-2">Simple y transparente</h2>
-          <p className="text-white/40 mt-3">Sin suscripciones. Pagás una vez y es tuyo para siempre.</p>
+          <p className="text-white/40 mt-3">Empezá gratis. Después pagás mes a mes o con descuento por todo el año.</p>
         </div>
-        <div className="max-w-md mx-auto">
-          <div className="bg-white/5 border border-accent/30 rounded-2xl p-8 relative">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-ink text-xs font-bold px-4 py-1 rounded-full">✓ Pago único</div>
-            <h3 className="font-display font-bold text-2xl text-white mb-1">{plan.nombre}</h3>
-            <p className="text-white/40 text-sm mb-6">{plan.descripcion}</p>
-            <div className="flex items-end gap-2 mb-8">
-              <span className="font-display font-extrabold text-5xl text-accent">{precio.monto}</span>
-              <span className="text-white/40 text-sm mb-2">{precio.detalle}</span>
-            </div>
-            <ul className="space-y-3 mb-8">
-              {plan.features.map((f, i) => (
-                <li key={i} className="flex items-center gap-2.5 text-sm text-white/70">
-                  <svg className="w-4 h-4 text-accent flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  {f}
-                </li>
-              ))}
-              {plan.noIncluye.map((f, i) => (
-                <li key={i} className="flex items-center gap-2.5 text-sm text-white/30">
-                  <svg className="w-4 h-4 text-white/20 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                  {f}
-                </li>
-              ))}
-            </ul>
-            <a href={waUrl} target="_blank" rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full bg-accent hover:bg-accent-dark text-ink font-bold text-sm py-4 rounded-xl transition-colors">
-              <WhatsAppIcon />
-              Comprar por WhatsApp
-            </a>
-          </div>
+        <div className="flex items-center justify-center gap-3 mb-12">
+          <span className={`font-body text-sm font-medium transition-colors ${periodo === "mensual" ? "text-white" : "text-white/40"}`}>Mensual</span>
+          <button onClick={() => setPeriodo(p => p === "mensual" ? "anual" : "mensual")}
+            aria-label="Cambiar entre pago mensual y anual"
+            className={`relative w-12 h-6 rounded-full transition-colors duration-200 ${periodo === "anual" ? "bg-accent" : "bg-white/20"}`}>
+            <span className={`absolute top-1 left-0 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${periodo === "anual" ? "translate-x-7" : "translate-x-1"}`} />
+          </button>
+          <span className={`font-body text-sm font-medium transition-colors ${periodo === "anual" ? "text-white" : "text-white/40"}`}>Anual</span>
+          {periodo === "anual" && <span className="bg-accent/10 text-accent text-xs font-bold px-2.5 py-1 rounded-full">15% OFF</span>}
         </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+          {sistema.planes.map((plan) => {
+            const precioData = plan.precios[currency]
+            const precio = precioData[periodo] || precioData.mensual
+            const esPrueba = plan.id === "prueba"
+            const destacado = plan.destacado
+            const waComprar = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(`Hola! Quiero contratar ComerciOS ${periodo}.`)}`
+
+            return (
+              <div key={plan.id} className={`relative rounded-2xl p-8 flex flex-col ${destacado ? "bg-white/5 border-2 border-accent" : "bg-white/5 border border-white/10"}`}>
+                {destacado && <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-ink text-xs font-bold px-4 py-1 rounded-full">⭐ Más elegido</div>}
+                <h3 className="font-display font-bold text-xl text-white mb-1">{plan.nombre}</h3>
+                <p className="text-white/40 text-sm mb-6">{plan.descripcion}</p>
+                <div className="mb-8">
+                  <div className="flex items-end gap-2">
+                    <span className={`font-display font-extrabold text-4xl ${destacado ? "text-accent" : "text-white"}`}>{precio.monto}</span>
+                    <span className="text-white/40 text-sm mb-1">{precio.detalle}</span>
+                  </div>
+                  {periodo === "anual" && precio.porMes && (
+                    <p className="text-xs mt-1 text-accent/80">≈ {precio.porMes}</p>
+                  )}
+                </div>
+                <ul className="space-y-2.5 mb-8 flex-1">
+                  {plan.features.map((f, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-white/70">
+                      <svg className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                      {f}
+                    </li>
+                  ))}
+                  {plan.noIncluye.map((f, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-white/30">
+                      <svg className="w-4 h-4 text-white/20 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                {esPrueba && descarga ? (
+                  <a href={descarga}
+                    className="flex items-center justify-center gap-2 w-full font-bold text-sm py-3.5 rounded-xl transition-colors bg-white/10 text-white hover:bg-white/20">
+                    ⬇️ Descargar y empezar
+                  </a>
+                ) : (
+                  <a href={esPrueba ? waProbar : waComprar} target="_blank" rel="noopener noreferrer"
+                    className={`flex items-center justify-center gap-2 w-full font-bold text-sm py-3.5 rounded-xl transition-colors ${
+                      destacado ? "bg-accent hover:bg-accent-dark text-ink" : "bg-white/10 text-white hover:bg-white/20"
+                    }`}>
+                    <WhatsAppIcon />
+                    {esPrueba ? "Empezar prueba gratis" : `Contratar ${periodo}`}
+                  </a>
+                )}
+              </div>
+            )
+          })}
+        </div>
+        <p className="text-center text-white/30 text-xs mt-8 font-body">
+          Cuando termina la prueba, pagás directamente desde el programa con Mercado Pago. Sin letra chica.
+        </p>
       </div>
     </section>
   )
@@ -263,6 +310,7 @@ function AdicionalesSeccion() {
         <div className="text-center mb-14">
           <span className="text-xs font-semibold uppercase tracking-widest text-accent">Adicionales</span>
           <h2 className="font-display font-bold text-3xl md:text-4xl text-ink mt-2">Potenciá tu sistema</h2>
+          <p className="text-ink/50 mt-3">Sumá solo lo que necesites, cuando lo necesites.</p>
         </div>
         <div className="max-w-2xl mx-auto grid gap-6">
           {sistema.adicionales.map((item, i) => {
@@ -272,9 +320,10 @@ function AdicionalesSeccion() {
               <div key={i} className="bg-white border border-slate-mid rounded-2xl p-8 flex flex-col md:flex-row md:items-center gap-6">
                 <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center text-2xl flex-shrink-0">{item.icono}</div>
                 <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-1">
+                  <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1">
                     <h3 className="font-display font-bold text-lg text-ink">{item.nombre}</h3>
                     <span className="font-display font-bold text-accent">{precio.monto}</span>
+                    <span className="font-body text-ink/40 text-xs">{precio.detalle}</span>
                   </div>
                   <p className="font-body text-ink/60 text-sm">{item.descripcion}</p>
                 </div>
@@ -308,7 +357,9 @@ function MediosPagoSeccion() {
             </div>
           ))}
         </div>
-        <p className="text-center text-ink/40 text-xs mt-6 font-body">Coordiná el pago directamente por WhatsApp.</p>
+        <p className="text-center text-ink/40 text-xs mt-6 font-body">
+          Pagás desde el programa con Mercado Pago. Si preferís otra forma, lo coordinamos por WhatsApp.
+        </p>
       </div>
     </section>
   )
@@ -363,25 +414,23 @@ function FaqSeccion() {
 }
 
 function CtaFinal() {
-  const { currency } = useCurrency()
-  const precio = sistema.planes[0].precios[currency]
-  const waComprar = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hola! Quiero comprar ComerciOS.")}`
-  const waDemo = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hola! Quiero una demo gratis de ComerciOS.")}`
+  const waProbar = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hola! Quiero probar ComerciOS 5 días gratis.")}`
+  const waHablar = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hola! Tengo una consulta sobre ComerciOS.")}`
+  const descarga = SITE.descargaComerciOS
 
   return (
     <section className="py-24 bg-accent">
       <div className="max-w-6xl mx-auto px-6 text-center">
         <h2 className="font-display font-extrabold text-3xl md:text-5xl text-ink mb-4">¿Listo para ordenar tu comercio?</h2>
-        <p className="font-body text-ink/60 text-lg mb-10 max-w-xl mx-auto">Comprá hoy y empezá a trabajar ordenado desde mañana.</p>
+        <p className="font-body text-ink/60 text-lg mb-10 max-w-xl mx-auto">Probalo 5 días con todas las funciones, sin tarjeta. Si necesitás ayuda para empezar, te acompañamos.</p>
         <div className="flex flex-wrap gap-4 justify-center">
-          <a href={waComprar} target="_blank" rel="noopener noreferrer"
+          <a href={descarga || waProbar} {...(descarga ? {} : { target: "_blank", rel: "noopener noreferrer" })}
             className="inline-flex items-center gap-2 bg-ink text-white font-bold text-base px-8 py-4 rounded-full hover:bg-ink/80 transition-colors shadow-xl">
-            <WhatsAppIcon />
-            Comprar — {precio.monto}
+            {descarga ? "⬇️ Descargar ComerciOS" : <><WhatsAppIcon /> Probar 5 días gratis</>}
           </a>
-          <a href={waDemo} target="_blank" rel="noopener noreferrer"
+          <a href={waHablar} target="_blank" rel="noopener noreferrer"
             className="inline-flex items-center gap-2 border-2 border-ink/20 text-ink font-medium text-base px-8 py-4 rounded-full hover:border-ink/40 transition-colors">
-            Pedir demo gratis
+            Hablar con nosotros
           </a>
         </div>
       </div>

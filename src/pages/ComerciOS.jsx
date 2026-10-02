@@ -16,6 +16,7 @@ export default function ComerciOSPage() {
       <CurrencyNavbar waText="Hola! Quiero probar ComerciOS 5 días gratis." ctaLabel="Probar gratis" />
       <HeroProducto />
       <DestacadosSeccion />
+      <PasosSeccion />
       <CarruselSeccion />
       <PreciosSeccion />
       <AdicionalesSeccion />
@@ -70,6 +71,48 @@ function HeroProducto() {
           {["✓ 5 días gratis, sin tarjeta", "✓ Facturación electrónica ARCA", "✓ Cobro con QR", "✓ Vendé sin internet"].map((item, i) => (
             <span key={i} className="text-white/30 text-sm font-body">{item}</span>
           ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function PasosSeccion() {
+  const descarga = SITE.descargaComerciOS
+  const waAyuda = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hola! Necesito ayuda para instalar ComerciOS.")}`
+  const pasos = [
+    { n: "1", titulo: "Descargá el instalador", texto: "Un solo archivo para Windows 10 u 11. No hace falta ser administrador." },
+    { n: "2", titulo: "Ejecutalo", texto: "Si Windows muestra «Windows protegió su PC», hacé clic en «Más información» y después en «Ejecutar de todas formas». Es normal con programas nuevos." },
+    { n: "3", titulo: "Elegí «Probar gratis»", texto: "Tenés 5 días con todas las funciones, sin tarjeta. Cargá tus productos desde Excel y empezá a vender." },
+  ]
+
+  return (
+    <section className="py-20 bg-white border-y border-slate-mid">
+      <div className="max-w-5xl mx-auto px-6">
+        <div className="text-center mb-12">
+          <span className="text-xs font-semibold uppercase tracking-widest text-accent">Empezá hoy</span>
+          <h2 className="font-display font-bold text-3xl md:text-4xl text-ink mt-2">Instalalo en 3 pasos</h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {pasos.map((paso) => (
+            <div key={paso.n} className="bg-slate-light border border-slate-mid rounded-2xl p-6">
+              <div className="w-10 h-10 rounded-full bg-accent text-ink font-display font-extrabold flex items-center justify-center mb-4">{paso.n}</div>
+              <h3 className="font-display font-bold text-lg text-ink mb-2">{paso.titulo}</h3>
+              <p className="font-body text-sm text-ink/60 leading-relaxed">{paso.texto}</p>
+            </div>
+          ))}
+        </div>
+        <div className="flex flex-wrap justify-center gap-4 mt-10">
+          {descarga && (
+            <a href={descarga}
+              className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-ink font-bold text-base px-8 py-4 rounded-full transition-colors shadow-lg shadow-accent/20">
+              ⬇️ Descargar ComerciOS para Windows
+            </a>
+          )}
+          <a href={waAyuda} target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 border border-ink/20 text-ink/70 hover:text-ink hover:border-ink/40 font-medium text-base px-8 py-4 rounded-full transition-colors">
+            Necesito ayuda para instalar
+          </a>
         </div>
       </div>
     </section>
@@ -294,7 +337,7 @@ function PreciosSeccion() {
           })}
         </div>
         <p className="text-center text-white/30 text-xs mt-8 font-body">
-          Cuando termina la prueba, pagás directamente desde el programa con Mercado Pago. Sin letra chica.
+          Cuando termina la prueba, pagás por Mercado Pago o transferencia y te enviamos tu código de licencia por WhatsApp. Sin letra chica.
         </p>
       </div>
     </section>
@@ -358,7 +401,7 @@ function MediosPagoSeccion() {
           ))}
         </div>
         <p className="text-center text-ink/40 text-xs mt-6 font-body">
-          Pagás desde el programa con Mercado Pago. Si preferís otra forma, lo coordinamos por WhatsApp.
+          Coordinamos el pago por WhatsApp y activás tu licencia al instante con un código.
         </p>
       </div>
     </section>

@@ -21,8 +21,8 @@ export const SITE = {
   name: "LinkoSolutions",
   tagline: "Software para comercios",
   whatsapp: "5491157038075",
-  // Link directo al instalador de ComerciOS (ej. una Release de GitHub). Vacío = se oculta el botón "Descargar".
-  descargaComerciOS: "",
+  // Link directo al instalador de ComerciOS (Release de GitHub, siempre apunta a la última). Vacío = se oculta el botón "Descargar".
+  descargaComerciOS: "https://github.com/linkosolutions/linkosolutions/releases/latest/download/ComerciOS-Setup.exe",
   whatsappMessage: "Hola! Me interesa conocer más sobre sus sistemas.",
   email: "linkosolutionss@gmail.com",
   instagram: "https://instagram.com/linkosolutionss",
@@ -112,7 +112,7 @@ export const SISTEMAS = [
           ARS: { mensual: { monto: "$7.000", detalle: "por mes" }, anual: { monto: "$71.400", detalle: "por año", porMes: "$5.950/mes" } },
           USD: { mensual: { monto: "USD 5",  detalle: "per month" }, anual: { monto: "USD 51", detalle: "per year", porMes: "USD 4.25/mo" } },
         },
-        descripcion: "Todo lo que necesitás para trabajar ordenado desde el primer día. Pagás directo desde el programa con Mercado Pago.",
+        descripcion: "Todo lo que necesitás para trabajar ordenado desde el primer día, sin letra chica.",
         features: [
           "Ventas, caja y cierre diario",
           "Control de stock e inventario",
@@ -169,14 +169,14 @@ export const SISTEMAS = [
       { label: "RAM mínima",        valor: "4 GB" },
       { label: "Almacenamiento",    valor: "500 MB libres" },
       { label: "Internet",          valor: "Para vender no hace falta" },
-      { label: "Con internet",      valor: "Activar, facturar, QR, backup y actualizar" },
+      { label: "Con internet",      valor: "Facturar, QR, backup en la nube y actualizar" },
       { label: "Facturación",       valor: "CUIT, clave fiscal y certificado (te guiamos)" },
       { label: "Instalación",       valor: "Instalador simple · te ayudamos si querés" },
     ],
     faq: [
       { pregunta: "¿Puedo probarlo antes de pagar?", respuesta: "Sí. Tenés 5 días de prueba gratuita con todas las funciones, sin tarjeta. Si te gusta, seguís con los datos que ya cargaste." },
-      { pregunta: "¿Necesito internet para usar ComerciOS?", respuesta: "Para vender, controlar el stock y manejar la caja no. Se necesita internet para activar la licencia, facturar con ARCA, cobrar con QR, hacer el backup en la nube y recibir actualizaciones." },
-      { pregunta: "¿Cómo se paga?", respuesta: "Desde el mismo programa, con Mercado Pago, mensual o anual (el anual tiene 15% de descuento). Se activa solo cuando se acredita el pago. Si preferís, lo coordinamos por WhatsApp." },
+      { pregunta: "¿Necesito internet para usar ComerciOS?", respuesta: "Para vender, controlar el stock y manejar la caja no. Se necesita internet para facturar con ARCA, cobrar con QR, hacer el backup en la nube y recibir actualizaciones." },
+      { pregunta: "¿Cómo se paga?", respuesta: "Cuando termina la prueba, pagás por Mercado Pago o transferencia (mensual o anual; el anual tiene 15% de descuento) y te enviamos por WhatsApp tu código de licencia. Lo pegás en el programa y queda activado al instante." },
       { pregunta: "¿Qué pasa si dejo de pagar?", respuesta: "La licencia vence y tenés unos días de gracia. Tus datos siguen en tu computadora; cuando renovás, seguís donde quedaste." },
       { pregunta: "¿Cómo facturo con ARCA?", respuesta: "Necesitás tu CUIT, clave fiscal y un certificado digital. El programa te guía paso a paso y genera la solicitud del certificado por vos. Sirve para Monotributo (Factura C) y Responsable Inscripto (Facturas A y B)." },
       { pregunta: "Tengo más de una caja, ¿puedo usarlo en todas?", respuesta: "Sí. Una computadora es la principal y las demás se conectan por la red del local, comparten productos, stock y reportes, y venden al mismo tiempo. Cada caja adicional cuesta $5.000 por mes." },
